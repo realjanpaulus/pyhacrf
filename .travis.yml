@@ -30,7 +30,7 @@ after_success:
     - echo index-servers = pypi                        >> ~/.pypirc
     - echo [pypi]                                      >> ~/.pypirc
     - echo repository=https://pypi.python.org/pypi     >> ~/.pypirc
-    - echo username=zope.wheelbuilder                  >> ~/.pypirc
+    - echo username=Dirko.Coetsee                      >> ~/.pypirc
     - echo password=$PYPIPASSWORD                      >> ~/.pypirc
     - if [[ $TRAVIS_TAG && "$TRAVIS_OS_NAME" == "osx" ]]; then pip install twine; fi
     - if [[ $TRAVIS_TAG && "$TRAVIS_OS_NAME" == "osx" ]]; then python setup.py bdist_wheel; fi
