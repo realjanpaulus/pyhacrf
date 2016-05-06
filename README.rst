@@ -4,7 +4,7 @@ pyhacrf
     :target: https://travis-ci.org/datamade/pyhacrf
     
 .. image:: https://ci.appveyor.com/api/projects/status/kibqrd7wnsk2ilpf?svg=true
-    :target: https://ci.appveyor.com/project/datamade/pyhacrf
+    :target: https://ci.appveyor.com/project/fgregg/pyhacrf
 
 Hidden alignment conditional random field for classifying string pairs -
 a learnable edit distance.
