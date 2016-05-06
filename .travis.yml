@@ -19,6 +19,7 @@ before_install:
     - if [[ "$TERRYFY_PYTHON" == "homebrew 3" ]]; then alias pip=`which pip3` ; fi
 install:
     - pip install --upgrade pip
+    - pip install --upgrade numpy
     - pip install -r requirements-dev.txt
     - cython pyhacrf/algorithms.pyx
     - pip install -e .
