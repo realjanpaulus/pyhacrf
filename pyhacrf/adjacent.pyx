@@ -6,7 +6,9 @@ cimport numpy as np
 from numpy import ndarray
 from numpy cimport ndarray
 from numpy.math cimport INFINITY as inf
-from libc.math cimport log1p, exp
+from libc.math cimport exp
+cdef extern from "log1p.h" nogil:
+    double log1p(double x)
 
 cdef np.float64_t LOG_2 = 0.6931471805599453
 cdef np.float64_t LOG_3 = 1.0986122886681098
