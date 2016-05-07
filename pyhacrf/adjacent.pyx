@@ -7,8 +7,11 @@ from numpy import ndarray
 from numpy cimport ndarray
 from numpy.math cimport INFINITY as inf
 cdef extern from "math.h" nogil :
-    np.float64_t log (np.float64_t x)
+    np.float64_t log1p (np.float64_t x)
     np.float64_t exp (np.float64_t x)
+
+cdef np.float64_t LOG_2 = 0.6931471805599453
+cdef np.float64_t LOG_3 = 1.0986122886681098
 
 cpdef dict forward(np.ndarray[np.float64_t, ndim=3] x_dot_parameters, int S):
     """ Helper to calculate the forward weights.  """
@@ -55,7 +58,7 @@ cpdef dict forward(np.ndarray[np.float64_t, ndim=3] x_dot_parameters, int S):
                 match = (alpha[i - 1, j - 1, s] +
                          x_dot_parameters[i, j, matching + s])
                 alpha[i, j, s] = (x_dot_parameters[i, j, s] +
-                                  logaddexp(insert, logaddexp(delete, match)))
+                                  logsumexp(insert, delete, match))
 
                 alpha[i - 1, j, s, i, j, s, insertion + s] = insert
                 alpha[i, j - 1, s, i, j, s, deletion + s] = delete
@@ -120,15 +123,11 @@ cpdef dict backward(np.ndarray[np.float64_t, ndim=3] x_dot_parameters, int S):
                 delete += x_dot_parameters[i, j + 1, deletion + s]
                 match += x_dot_parameters[i + 1, j + 1, matching + s]
                 
-                beta[i, j, s] = logaddexp(insert, logaddexp(delete, match))
-
-
+                beta[i, j, s] = logsumexp(insert, delete, match)
 
     return beta
 
-
-
-cpdef np.float64_t[:, :, ::1] forward_predict(np.float64_t[:, :, ::1] x_dot_parameters,
+cpdef np.float64_t[::1] forward_predict(np.float64_t[:, :, :] x_dot_parameters,
                                               int S) :
     cdef np.float64_t[:, :, ::1] alpha = x_dot_parameters.copy()
 
@@ -160,8 +159,8 @@ cpdef np.float64_t[:, :, ::1] forward_predict(np.float64_t[:, :, ::1] x_dot_para
             alpha[0, j, s] = x_dot_parameters[0, j, s] + delete
         
         # Now fill in the middle of the matrix    
-        for i in range(1, I):
-            for j in range(1, J):
+        for j in range(1, J):
+            for i in range(1, I):
                 insert = (alpha[i - 1, j, s] +
                           x_dot_parameters[i, j, insertion + s])
                 delete = (alpha[i, j - 1, s] +
@@ -169,20 +168,53 @@ cpdef np.float64_t[:, :, ::1] forward_predict(np.float64_t[:, :, ::1] x_dot_para
                 match = (alpha[i - 1, j - 1, s] +
                          x_dot_parameters[i, j, matching + s])
                 alpha[i, j, s] = (x_dot_parameters[i, j, s] +
-                                  logaddexp(insert, logaddexp(delete, match)))
+                                  logsumexp(insert, delete, match))
 
-    return alpha
+
+    cdef np.float64_t[::1] final_alphas = alpha[I - 1, J - 1, :S]
+    cdef np.float64_t Z = -inf
+
+    for s in range(S):
+        Z = logaddexp(Z, final_alphas[s])
+
+    for s in range(S):
+        final_alphas[s] = exp(final_alphas[s] - Z)
+
+    return final_alphas
 
 cdef np.float64_t logaddexp(np.float64_t x, np.float64_t y) nogil:
     cdef np.float64_t tmp
     if x == y :
-        return x + log(2)
+        return x + LOG_2
     else :
         tmp = x - y
         if tmp > 0 :
-            return x + log(1 + exp(-tmp))
+            return x + log1p(exp(-tmp))
         elif tmp <= 0 :
-            return y + log(1 + exp(tmp))
+            return y + log1p(exp(tmp))
         else :
             return tmp
-    
+
+cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) :
+    if x == y == z:
+        return x + LOG_3
+    elif x > y > z or x > z > y:
+        return x + log1p(exp(y - x) + exp(z - x))
+    elif x > y == z:
+        return x + log1p(exp(y - x) * 2)
+    elif x == y > z:
+        return x + LOG_2 + log1p(exp(z - x - LOG_2))
+    elif x == z > y:
+        return x + LOG_2 + log1p(exp(y - x - LOG_2))
+    elif y > x > z or y > z > x:
+        return y + log1p(exp(x - y) + exp(z - y))
+    elif y > x == z:
+        return y + log1p(exp(x - y) * 2)
+    elif y == z > x:
+        return y + LOG_2 + log1p(exp(x - y - LOG_2))
+    elif z > x > y or z > y > x:
+        return z + log1p(exp(x - z) + exp(y - z))
+    elif z > x == y:
+        return z + log1p(exp(x - z) * 2)
+    else:
+        print("SHOULD NOT BE HERE", x, y, z)

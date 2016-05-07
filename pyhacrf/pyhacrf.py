@@ -141,6 +141,8 @@ class Hacrf(object):
                                              progress=None)
             self.optimizer_result = final_betas
             self.parameters = final_betas.reshape(self.parameters.shape)
+
+        self.parameters = np.asfortranarray(self.parameters)
         return self
 
     def predict_proba(self, X):
@@ -163,16 +165,16 @@ class Hacrf(object):
             where classes are ordered as they are in ``self.classes_``.
         """
         
-        parameters = np.ascontiguousarray(self.parameters.T)
-
-        predictions = [self._Model(self._state_machine, x).predict(parameters)
+        predictions = [self._Model(self._state_machine, x).predict(self.parameters.T)
                        for x in X]
-        predictions = np.array([[probability
-                                 for _, probability
-                                 in sorted(prediction.items())]
-                                for prediction in predictions])
+            
+        predictions = np.array(predictions)
         return predictions
 
+    def fast_pair(self, x):
+        predictions = self._Model(self._state_machine, x).predict(self.parameters.T)
+        return predictions
+    
     def predict(self, X):
         """Predict the class for X.
 
@@ -239,31 +241,15 @@ class _Model(object):
         self.x = x
         self.y = y
 
-        if (self.x == 0).sum() * 1.0 / self.x.size > 0.6:
-            self.sparse_x = self._construct_sparse_features(self.x)
-            self.forward_backward = self.sparse_forward_backward
-        else:
-            self.forward_backward = self.dense_forward_backward
+        self.forward_backward = self.dense_forward_backward
 
     def predict(self, parameters):
         """ Run forward algorithm to find the predicted distribution over classes. """
-        x_dot_parameters = np.einsum('ijk,kl->ijl', self.x, parameters)
+        x_dot_parameters = np.matmul(self.x, parameters)
 
-        alpha = self._forward_predict(x_dot_parameters)
+        probs = self._forward_predict(x_dot_parameters)
 
-        I, J, _ = self.x.shape
-
-        class_Z = {}
-        Z = -np.inf
-
-        for state, predicted_class in self.states_to_classes.items():
-            weight = alpha[I - 1, J - 1, state]
-            class_Z[predicted_class] = weight
-            Z = np.logaddexp(Z, weight)
-
-        return {label: np.exp(class_z - Z)
-                for label, class_z
-                in class_Z.items()}
+        return probs
 
     def dense_forward_backward(self, parameters):
         """ Run the forward backward algorithm with the given parameters. """

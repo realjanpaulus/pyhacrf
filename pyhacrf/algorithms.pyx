@@ -93,8 +93,17 @@ cpdef np.float64_t[:, :, ::1] forward_predict(np.int64_t[:, ::1] lattice,
             alpha[I, J, s] = x_dot_parameters[I, J, s]
         else:
             alpha[I, J, s] += x_dot_parameters[I, J, s]
-        
-    return alpha
+
+    cdef np.float64_t[::1] final_alphas = alpha[J - 1, I - 1, :S]
+    cdef np.float64_t Z = -inf
+
+    for s in range(S):
+        Z = logaddexp(Z, final_alphas[s])
+
+    for s in range(S):
+        final_alphas[s] = exp(final_alphas[s] - Z)
+
+    return final_alphas
 
 
 cpdef np.float64_t[:, :, ::1] forward_max_predict(np.int64_t[:, ::1] lattice,

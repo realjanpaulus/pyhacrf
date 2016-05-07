@@ -92,6 +92,10 @@ class PairFeatureExtractor(object):
         self._sparse_features = []
         if sparse:
             self._sparse_features = sparse
+        self.K = (len(self._binary_features) 
+                  + sum(num_feats for _, num_feats in self._sparse_features))
+
+            
 
     def fit_transform(self, raw_X, y=None):
         """Like transform. Transform sequence pairs to feature arrays that can be used as input to `Hacrf` models.
@@ -123,34 +127,39 @@ class PairFeatureExtractor(object):
             length of sequence2_n, and K is the number of features.
             Feature matrix list, for use with estimators or further transformers.
         """
-        return [self._extract_features(sequence1, sequence2) for sequence1, sequence2 in raw_X]
+        
+        return [self._extract_features(self._to_array(sequence1).T,
+                                       self._to_array(sequence2))
+                for sequence1, sequence2 in raw_X]
 
-    def _extract_features(self, sequence1, sequence2):
+    def _extract_features(self, array1, array2):
         """ Helper to extract features for one data point. """
 
-        array1 = np.array(tuple(sequence1), ndmin=2).T
-        array2 = np.array(tuple(sequence2), ndmin=2)
-
-        K = (len(self._binary_features) 
-             + sum(num_feats for _, num_feats in self._sparse_features))
-
-        feature_array = np.zeros((array1.size, array2.size, K), dtype='float64')
+        feature_array = np.zeros((array1.size, array2.size, self.K),
+                                 dtype='float64')
 
         for k, feature_function in enumerate(self._binary_features):
             feature_array[..., k] = feature_function(array1, array2)
 
         if self._sparse_features:
+            array1 = array1.T[0]
+            array2 = array2[0]
             n_binary_features = len(self._binary_features)
 
-            for i, j in np.ndindex(len(sequence1), len(sequence2)):
+            for i, j in np.ndindex(array1.size, array2.size):
                 k = n_binary_features
 
                 for feature_function, num_features in self._sparse_features:
                     
-                    feature_array[i, j, k + feature_function(i, j, sequence1, sequence2)] = 1.0
+                    feature_array[i, j, k + feature_function(i, j, array1, array2)] = 1.0
                     k += num_features
 
         return feature_array
+
+    def _to_array(self, sequence):
+        return np.array(tuple(sequence), ndmin=2)
+
+
 
 
 class StringPairFeatureExtractor(PairFeatureExtractor):
@@ -221,6 +230,12 @@ class StringPairFeatureExtractor(PairFeatureExtractor):
                                                   char2index = characters_to_index)
             self._sparse_features.append((curried_charIndex, 
                                           len(characters_to_index) ** 2))
+
+        self.K = (len(self._binary_features) 
+                  + sum(num_feats for _, num_feats in self._sparse_features))
+
+    def _to_array(self, sequence):
+        return np.frombuffer(unicode(sequence), dtype='<U1').reshape(1, -1)
 
 
 def charIndex(i, j, s1, s2, char2index=None) :
