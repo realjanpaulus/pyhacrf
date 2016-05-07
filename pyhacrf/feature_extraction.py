@@ -235,7 +235,7 @@ class StringPairFeatureExtractor(PairFeatureExtractor):
                   + sum(num_feats for _, num_feats in self._sparse_features))
 
     def _to_array(self, sequence):
-        return np.frombuffer(unicode(sequence), dtype='<U1').reshape(1, -1)
+        return np.asarray(tuple(sequence)).reshape(1, -1)
 
 
 def charIndex(i, j, s1, s2, char2index=None) :
