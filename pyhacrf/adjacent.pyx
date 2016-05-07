@@ -172,8 +172,8 @@ cpdef np.float64_t[::1] forward_predict(np.float64_t[:, :, :] x_dot_parameters,
 
 
     cdef np.float64_t[::1] final_alphas = alpha[I - 1, J - 1, :S]
-    cdef np.float64_t Z = -inf
 
+    cdef np.float64_t Z = -inf
     for s in range(S):
         Z = logaddexp(Z, final_alphas[s])
 
@@ -195,7 +195,7 @@ cdef np.float64_t logaddexp(np.float64_t x, np.float64_t y) nogil:
         else :
             return tmp
 
-cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) nogil :
+cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) :
     if x == y == z:
         return x + LOG_3
     elif x > y > z or x > z > y:
@@ -216,3 +216,5 @@ cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) nogi
         return z + log1p(exp(x - z) + exp(y - z))
     elif z > x == y:
         return z + log1p(exp(x - z) * 2)
+    else:
+        print('should not be here', x, y, z)
