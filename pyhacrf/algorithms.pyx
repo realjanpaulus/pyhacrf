@@ -51,9 +51,9 @@ cpdef dict forward(np.ndarray[np.int64_t, ndim=2] lattice, np.ndarray[np.float64
 
     return alpha
 
-cpdef np.float64_t[:, :, ::1] forward_predict(np.int64_t[:, ::1] lattice,
-                                      np.float64_t[:, :, ::1] x_dot_parameters,
-                                      long S) :
+cpdef np.float64_t[::1] forward_predict(np.int64_t[:, ::1] lattice,
+                                        np.float64_t[:, :, ::1] x_dot_parameters,
+                                        long S) :
     """ Helper to calculate the forward weights for prediction.  """
 
     cdef np.float64_t[:, :, ::1] alpha = x_dot_parameters.copy()
