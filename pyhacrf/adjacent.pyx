@@ -6,9 +6,7 @@ cimport numpy as np
 from numpy import ndarray
 from numpy cimport ndarray
 from numpy.math cimport INFINITY as inf
-cdef extern from "math.h" nogil :
-    np.float64_t log1p (np.float64_t x)
-    np.float64_t exp (np.float64_t x)
+from libc.math cimport log1p, exp
 
 cdef np.float64_t LOG_2 = 0.6931471805599453
 cdef np.float64_t LOG_3 = 1.0986122886681098
@@ -195,7 +193,7 @@ cdef np.float64_t logaddexp(np.float64_t x, np.float64_t y) nogil:
         else :
             return tmp
 
-cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) :
+cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) nogil :
     if x == y == z:
         return x + LOG_3
     elif x > y > z or x > z > y:
@@ -216,5 +214,3 @@ cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) :
         return z + log1p(exp(x - z) + exp(y - z))
     elif z > x == y:
         return z + log1p(exp(x - z) * 2)
-    else:
-        print("SHOULD NOT BE HERE", x, y, z)
