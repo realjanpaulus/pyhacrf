@@ -319,6 +319,7 @@ class TestAdjacentModel(unittest.TestCase):
 
         x_dot_parameters = np.dot(x, parameters.T)  # Pre-compute the dot product
         actual_beta = test_model._backward(x_dot_parameters)
+        print(sys.maxsize)
         print(sorted(actual_beta.items()))
         print(sorted(expected_beta.items()))
 
