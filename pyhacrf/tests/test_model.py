@@ -1,6 +1,7 @@
 """ Tests for the model. """
 
 import unittest
+import sys
 
 from numpy.testing import assert_array_almost_equal, assert_array_equal
 import numpy as np
@@ -322,7 +323,9 @@ class TestAdjacentModel(unittest.TestCase):
         for key in sorted(expected_beta.keys(), reverse=True):
             print(key, expected_beta[key], actual_beta[key])
             self.assertAlmostEqual(actual_beta[key], expected_beta[key])
-            
+
+    @unittest.skipIf(sys.platform.startswith('win') and sys.version[0] == 3,
+                     "strange overflow in windows, python 3")
     def test_forward_backward_same_partition_value(self):
         classes = ['a', 'b']
         parameters = np.array(range(-8, 8), dtype='float64').reshape((8, 2))
