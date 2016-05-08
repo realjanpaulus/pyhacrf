@@ -23,8 +23,8 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 
 setup(
-    name='pyhacrf',
-    version='0.1.2',
+    name='pyhacrf-datamade',
+    version='0.2.9',
     packages=['pyhacrf'],
     install_requires=['numpy>=1.9', 'PyLBFGS>=0.1.3'],
     ext_modules=[NumpyExtension('pyhacrf.algorithms', 
@@ -33,11 +33,11 @@ setup(
                  NumpyExtension('pyhacrf.adjacent', 
                                 ['pyhacrf/adjacent.c'],
                                 extra_compile_args = ["-ffast-math", "-O4"])],
-    url='https://github.com/dirko/pyhacrf',
-    download_url='https://github.com/dirko/pyhacrf/tarball/0.1.2',
-    license='BSD',
+    url='https://github.com/datamade/pyhacrf',
     author='Dirko Coetsee',
     author_email='dpcoetsee@gmail.com',
+    maintainer='Forest Gregg',
+    maintiner_email='fgregg@gmail.com',
     description='Hidden alignment conditional random field, a discriminative string edit distance',
     long_description=long_description,
     classifiers=[
