@@ -288,7 +288,7 @@ class TestAdjacentModel(unittest.TestCase):
             self.assertAlmostEqual(actual_alpha[key], expected_alpha[key])
 
     def test_backward_connected(self):
-        parameters = np.array(range(-3, 3), dtype='float64').reshape((3, 2))
+        parameters = np.array(range(-3, 3), dtype=np.float64).reshape((3, 2))
         # parameters =
         #0 ([[-3, -2],
         #1   [-1,  0],
@@ -324,8 +324,6 @@ class TestAdjacentModel(unittest.TestCase):
             print(key, expected_beta[key], actual_beta[key])
             self.assertAlmostEqual(actual_beta[key], expected_beta[key])
 
-    @unittest.skipIf(sys.platform.startswith('win') and sys.version[0] == 3,
-                     "strange overflow in windows, python 3")
     def test_forward_backward_same_partition_value(self):
         classes = ['a', 'b']
         parameters = np.array(range(-8, 8), dtype='float64').reshape((8, 2))
