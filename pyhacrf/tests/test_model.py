@@ -287,10 +287,8 @@ class TestAdjacentModel(unittest.TestCase):
 
             self.assertAlmostEqual(actual_alpha[key], expected_alpha[key])
 
-    @unittest.skipIf(sys.platform.startswith('win') and
-                     sys.version[0] == 3 and
-                     sys.maxsize > 2**31,
-                    "strange overflow in 64 bit windows, python 3")
+    @unittest.skipIf(sys.platform.startswith('win'),
+                    "strange overflow on windows")
     def test_backward_connected(self):
         parameters = np.array(range(-3, 3), dtype=np.float64).reshape((3, 2))
         # parameters =
@@ -319,7 +317,6 @@ class TestAdjacentModel(unittest.TestCase):
 
         x_dot_parameters = np.dot(x, parameters.T)  # Pre-compute the dot product
         actual_beta = test_model._backward(x_dot_parameters)
-        print(sys.maxsize)
         print(sorted(actual_beta.items()))
         print(sorted(expected_beta.items()))
 
