@@ -195,7 +195,7 @@ cdef np.float64_t logaddexp(np.float64_t x, np.float64_t y) nogil:
         else :
             return tmp
 
-cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) :
+cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) nogil :
     if x == y == z:
         return x + LOG_3
     elif x > y > z or x > z > y:
@@ -216,5 +216,3 @@ cdef np.float64_t logsumexp(np.float64_t x, np.float64_t y, np.float64_t z) :
         return z + log1p(exp(x - z) + exp(y - z))
     elif z > x == y:
         return z + log1p(exp(x - z) * 2)
-    else:
-        print('should not be here', x, y, z)
