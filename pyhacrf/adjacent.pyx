@@ -8,7 +8,7 @@ from numpy cimport ndarray
 from numpy.math cimport INFINITY as inf
 from libc.math cimport exp
 cdef extern from "log1p.h" nogil:
-    double log1p(double x)
+    np.float64_t log1p(np.float64_t x)
 
 cdef np.float64_t LOG_2 = 0.6931471805599453
 cdef np.float64_t LOG_3 = 1.0986122886681098
