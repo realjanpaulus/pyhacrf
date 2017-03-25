@@ -94,7 +94,7 @@ Clone from repository, then
 
 ::
 
-    pip install -r requirements-dev.txt
+    pip install -r requirements.txt
     cython pyhacrf/*.pyx
     python setup.py install
 
