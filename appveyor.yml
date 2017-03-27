@@ -21,7 +21,7 @@ install:
 build: false
 
 test_script:
-  - pytests pyhacrf
+  - pytest pyhacrf
 
 on_success:
   - echo Build succesful!
