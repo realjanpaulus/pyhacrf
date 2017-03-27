@@ -53,7 +53,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='pyhacrf-datamade',
-    version='0.2.0',
+    version='0.2.1',
     packages=['pyhacrf'],
     install_requires=['numpy>=1.9', 'PyLBFGS>=0.1.3'],
     ext_modules=[NumpyExtension('pyhacrf.algorithms',
