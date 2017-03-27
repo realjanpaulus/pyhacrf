@@ -21,7 +21,7 @@ install:
 build: false
 
 test_script:
-  - nosetests
+  - pytests pyhacrf
 
 on_success:
   - echo Build succesful!
