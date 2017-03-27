@@ -6,6 +6,9 @@ from os import path
 class NumpyExtension(Extension):
 
     def __init__(self, *args, **kwargs):
+        self._info = self.info
+        kwargs.update(self.info)
+
         Extension.__init__(self, *args, **kwargs)
 
         self._include_dirs = self.include_dirs
@@ -26,6 +29,20 @@ class NumpyExtension(Extension):
     include_dirs = property(get_include_dirs,
                             set_include_dirs,
                             del_include_dirs)
+
+    def get_info(self):
+        from numpy.distutils.misc_util import get_info
+        return get_info('npymath')
+
+    def set_info(self, value):
+        self._info = value
+
+    def del_info(self):
+        pass
+
+    info = property(get_info,
+                    set_info,
+                    del_info)
 
 here = path.abspath(path.dirname(__file__))
 
