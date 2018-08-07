@@ -1,7 +1,7 @@
 pyhacrf
 =======
-.. image:: https://travis-ci.org/datamade/pyhacrf.svg?branch=master
-    :target: https://travis-ci.org/datamade/pyhacrf
+.. image:: https://travis-ci.org/dedupeio/pyhacrf.svg?branch=master
+    :target: https://travis-ci.org/dedupeio/pyhacrf
     
 .. image:: https://ci.appveyor.com/api/projects/status/kibqrd7wnsk2ilpf/branch/master?svg=true
     :target: https://ci.appveyor.com/project/fgregg/pyhacrf
