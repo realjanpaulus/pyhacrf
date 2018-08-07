@@ -1,5 +1,6 @@
 from setuptools import setup, Extension
 import numpy
+import numpy.distutils
 
 try:
     from Cython.Build import cythonize
@@ -7,12 +8,11 @@ try:
 except ImportError:
     use_cython = False
 
-
 if use_cython:
     ext_modules = cythonize([Extension('pyhacrf.algorithms',
                                        ['pyhacrf/algorithms.pyx'],
-                                       include_dirs=[numpy.get_include()],
-                                       extra_compile_args = ["-ffast-math", "-O4"]),
+                                       extra_compile_args = ["-ffast-math", "-O4"],
+                                       **numpy.distutils.misc_util.get_info('npymath')),
                              Extension('pyhacrf.adjacent',
                                        ['pyhacrf/adjacent.pyx'],
                                        include_dirs=[numpy.get_include()],
@@ -20,8 +20,8 @@ if use_cython:
 else:
     ext_modules = [Extension('pyhacrf.algorithms',
                              ['pyhacrf/algorithms.c'],
-                             include_dirs=[numpy.get_include()],
-                             extra_compile_args = ["-ffast-math", "-O4"]),
+                             extra_compile_args = ["-ffast-math", "-O4"],
+                             **numpy.distutils.misc_util.get_info('npymath')),
                    Extension('pyhacrf.adjacent',
                              ['pyhacrf/adjacent.c'],
                              include_dirs=[numpy.get_include()],
@@ -36,13 +36,13 @@ setup(
     name='pyhacrf-datamade',
     version='0.2.2',
     packages=['pyhacrf'],
-    install_requires=['numpy>=1.10', 'PyLBFGS>=0.1.3'],
+    install_requires=['numpy==1.12.1', 'PyLBFGS>=0.1.3'],
     ext_modules=ext_modules,
     url='https://github.com/datamade/pyhacrf',
     author='Dirko Coetsee',
     author_email='dpcoetsee@gmail.com',
     maintainer='Forest Gregg',
-    maintiner_email='fgregg@gmail.com',
+    maintainer_email='fgregg@gmail.com',
     description='Hidden alignment conditional random field, a discriminative string edit distance',
     long_description=readme(),
     classifiers=[
