@@ -27,7 +27,7 @@ test_script:
   - pytest pyhacrf
 
 on_success:
-  - echo Build succesful!
+  - echo Build successful!
 
 deploy_script:
   - echo [distutils]                                  > %USERPROFILE%\\.pypirc
@@ -38,6 +38,7 @@ deploy_script:
   - echo password=%password%                         >> %USERPROFILE%\\.pypirc
   - set HOME=%USERPROFILE%
   - pip install wheel twine
+  - pip install --upgrade setuptools
   - ps: if($env:APPVEYOR_REPO_TAG -eq $TRUE) { python -W ignore setup.py bdist_wheel; twine upload dist/* }
 
 deploy : on
