@@ -287,8 +287,6 @@ class TestAdjacentModel(unittest.TestCase):
 
             self.assertAlmostEqual(actual_alpha[key], expected_alpha[key])
 
-    @unittest.skipIf(sys.platform.startswith('win'),
-                    "strange overflow on windows")
     def test_backward_connected(self):
         parameters = np.array(range(-8, 8), dtype=np.float64).reshape((8, 2))
         # parameters =
