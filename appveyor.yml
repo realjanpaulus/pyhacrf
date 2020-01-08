@@ -3,7 +3,6 @@ environment:
     secure: WCflARlYtKV2j4dKfsQQVg==
 
   matrix:
-    - python : 35
     - python : 35-x64
     - python : 36
     - python : 36-x64
