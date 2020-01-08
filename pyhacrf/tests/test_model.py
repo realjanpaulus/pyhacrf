@@ -288,25 +288,26 @@ class TestAdjacentModel(unittest.TestCase):
             self.assertAlmostEqual(actual_alpha[key], expected_alpha[key])
 
     def test_backward_connected(self):
-        parameters = np.array(range(-8, 8), dtype=np.float64).reshape((8, 2))
+        parameters = np.array(range(-4, 4), dtype=np.float64).reshape((4, 2))
         # parameters =
-        #0 ([[-3, -2],
-        #1   [-1,  0],
-        #2   [ 1,  2]])
+        #0([[-4, -3],
+        #1  [-2, -1],
+        #2  [ 0,  1],
+        #3  [ 2,  3]])
         x = np.array([[[0, 1],
                        [2, 1]],
                       [[0, 1],
                        [1, 0]]], dtype=np.float64)
         y = 'a'
         expected_beta = {
-            (0, 0, 0): -13.997524314862176,
-            (0, 0, 0, 0, 1, 0, 2): -33.0,
-            (0, 0, 0, 1, 0, 0, 3): -19.0,
-            (0, 0, 0, 1, 1, 0, 1): -8.0,
-            (0, 1, 0): -10.0,
-            (0, 1, 0, 1, 1, 0, 3): -8.0,
-            (1, 0, 0): -12.0,
-            (1, 0, 0, 1, 1, 0, 2): -8.0,
+            (0, 0, 0): -3.872776558098594,
+            (0, 0, 0, 0, 1, 0, 2): -13,
+            (0, 0, 0, 1, 0, 0, 3): -7,
+            (0, 0, 0, 1, 1, 0, 1): -4,
+            (0, 1, 0): -2.0,
+            (0, 1, 0, 1, 1, 0, 3): -4.0,
+            (1, 0, 0): -4.0,
+            (1, 0, 0, 1, 1, 0, 2): -4.0,
             (1, 1, 0): 0.0}
 
 
