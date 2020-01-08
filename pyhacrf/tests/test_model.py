@@ -290,7 +290,7 @@ class TestAdjacentModel(unittest.TestCase):
     @unittest.skipIf(sys.platform.startswith('win'),
                     "strange overflow on windows")
     def test_backward_connected(self):
-        parameters = np.array(range(-3, 3), dtype=np.float64).reshape((3, 2))
+        parameters = np.array(range(-8, 8), dtype=np.float64).reshape((8, 2))
         # parameters =
         #0 ([[-3, -2],
         #1   [-1,  0],
@@ -301,14 +301,14 @@ class TestAdjacentModel(unittest.TestCase):
                        [1, 0]]], dtype=np.float64)
         y = 'a'
         expected_beta = {
-            (0, 0, 0): -3.905077043579039,
-            (0, 0, 0, 0, 1, 0, 2): -11.0,
-            (0, 0, 0, 1, 0, 0, 3): -4.0,
-            (0, 0, 0, 1, 1, 0, 1): -3.0,
-            (0, 1, 0): -3.0,
-            (0, 1, 0, 1, 1, 0, 3): -3.0,
-            (1, 0, 0): -2.0,
-            (1, 0, 0, 1, 1, 0, 2): -3.0,
+            (0, 0, 0): -13.997524314862176,
+            (0, 0, 0, 0, 1, 0, 2): -33.0,
+            (0, 0, 0, 1, 0, 0, 3): -19.0,
+            (0, 0, 0, 1, 1, 0, 1): -8.0,
+            (0, 1, 0): -10.0,
+            (0, 1, 0, 1, 1, 0, 3): -8.0,
+            (1, 0, 0): -12.0,
+            (1, 0, 0, 1, 1, 0, 2): -8.0,
             (1, 1, 0): 0.0}
 
 
@@ -320,7 +320,6 @@ class TestAdjacentModel(unittest.TestCase):
         print(sorted(actual_beta.items()))
         print(sorted(expected_beta.items()))
 
-        print
         self.assertEqual(len(actual_beta), len(expected_beta))
         for key in sorted(expected_beta.keys(), reverse=True):
             print(key, expected_beta[key], actual_beta[key])

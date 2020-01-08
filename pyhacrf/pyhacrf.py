@@ -342,6 +342,7 @@ class _AdjacentModel(_Model):
                                 self.state_machine.n_states)
 
     def _backward(self, x_dot_parameters) :
+        print(x_dot_parameters)
         return adjacent.backward(x_dot_parameters,
                                  self.state_machine.n_states)
 
