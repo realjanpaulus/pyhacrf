@@ -11,11 +11,12 @@ except ImportError:
 if use_cython:
     ext_modules = cythonize([Extension('pyhacrf.algorithms',
                                        ['pyhacrf/algorithms.pyx'],
-                                       extra_compile_args = ["-ffast-math", "-O4"],
+                                       extra_compile_args = ["-ffast-math", "-O4"]
                                        **numpy.distutils.misc_util.get_info('npymath')),
                              Extension('pyhacrf.adjacent',
                                        ['pyhacrf/adjacent.pyx'],
                                        include_dirs=[numpy.get_include()],
+                                       extra_link_args=['-lm'],
                                        extra_compile_args = ["-ffast-math", "-O4"])])
 else:
     ext_modules = [Extension('pyhacrf.algorithms',
@@ -24,6 +25,7 @@ else:
                              **numpy.distutils.misc_util.get_info('npymath')),
                    Extension('pyhacrf.adjacent',
                              ['pyhacrf/adjacent.c'],
+                             extra_link_args=['-lm'],
                              include_dirs=[numpy.get_include()],
                              extra_compile_args = ["-ffast-math", "-O4"])]
 
