@@ -202,7 +202,7 @@ class StringPairFeatureExtractor(PairFeatureExtractor):
     """
 
     # Constants
-    CHARACTERS = 'abcdefghijklmnopqrstuvwxyz0123456789,./;\'\-=<>?:"|_+!@#$%^&*() '
+    CHARACTERS = 'abcdefghijklmnopqrstuvwxyz0123456789,./;\'\\-=<>?:"|_+!@#$%^&*() '
 
     
 
