@@ -2,4 +2,4 @@
 requires = ["setuptools",
             "wheel",
             "cython",
-            "oldest_supported_python"]
+            "oldest_supported_numpy"]
