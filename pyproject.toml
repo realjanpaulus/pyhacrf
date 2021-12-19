@@ -4,4 +4,4 @@ requires = ["setuptools",
             "cython",
             "numpy==1.14.1; python_version=='3.6' and platform_system=='win32'",
             "numpy==1.14.1; python_version=='3.5' and platform_system=='win32'",
-            "oldest_supported_numpy; not (platform_system=='win32' and python_version in ('3.5', '3.6'))"]
+            "oldest_supported_numpy; platform_system!='win32' or python_version not in ('3.5', '3.6'))"]
