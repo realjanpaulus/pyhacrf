@@ -2,6 +2,6 @@
 requires = ["setuptools",
             "wheel",
             "cython",
-            "numpy==1.14.1; python_version=='3.6' and platform_system=='win32'",
-            "numpy==1.14.1; python_version=='3.5' and platform_system=='win32'",
-            "oldest_supported_numpy; platform_system!='win32' or (python_version!='3.5' and python_version!='3.6')"]
+            "numpy==1.14.1; python_version=='3.6' and platform_system=='Windows'",
+            "numpy==1.14.1; python_version=='3.5' and platform_system=='Windows'",
+            "oldest_supported_numpy; platform_system!='Windows' or (python_version!='3.5' and python_version!='3.6')"]
