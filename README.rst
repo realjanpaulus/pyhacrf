@@ -105,4 +105,5 @@ To deploy to pypi, make sure you have compiled the \*.pyx files to \*.c
 Alternatively use the ``Makefile``
 
 ::
+
     make
