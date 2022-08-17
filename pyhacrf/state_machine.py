@@ -3,7 +3,7 @@ from collections import defaultdict, deque
 
 
 class GeneralStateMachine(object):
-    """ State machine which, together with two input sequences, is used to build the lattice.
+    """State machine which, together with two input sequences, is used to build the lattice.
 
     Each state and each transition is labelled by different integers.
 
@@ -28,13 +28,16 @@ class GeneralStateMachine(object):
         self._start_states = start_states
         self._transitions = transitions
 
-        max_state = max(max(s for s, _, _ in transitions), max(s for _, s, _ in transitions)) + 1
+        max_state = (
+            max(max(s for s, _, _ in transitions), max(s for _, s, _ in transitions))
+            + 1
+        )
         self.n_states = max_state
         self.n_transitions = len(transitions)
         self.states_to_classes = states_to_classes
 
     def build_lattice(self, x):
-        """ Construct the list of nodes and edges for input features. """
+        """Construct the list of nodes and edges for input features."""
         I, J, _ = x.shape
         start_states, transitions = self._start_states, self._transitions
 
@@ -69,7 +72,7 @@ class GeneralStateMachine(object):
 
         # Step backwards through lattice and add visitable nodes to the set of nodes to keep. The rest are discarded.
         final_lattice = []
-        visited_nodes = set((I-1, J-1, s) for s in range(n_states))
+        visited_nodes = set((I - 1, J - 1, s) for s in range(n_states))
 
         for node in lattice[::-1]:
             if node in visited_nodes:
@@ -84,10 +87,11 @@ class GeneralStateMachine(object):
 
         # Squash list
         lattice = [edge for edge in reversed_list if len(edge) > 3]
-        return np.array(lattice, dtype='int64')
+        return np.array(lattice, dtype="int64")
+
 
 class DefaultStateMachine(object):
-    """ State machine which, together with two input sequences, is used to build the lattice.
+    """State machine which, together with two input sequences, is used to build the lattice.
 
     Simple and fast state machine with a single state for each class.
     Allows for character match/substitution, deletion, and insertion.
@@ -97,11 +101,9 @@ class DefaultStateMachine(object):
     classes : list
         The set of labels.
     """
-    def __init__(self, classes) :
+
+    def __init__(self, classes):
         self.n_states = len(classes)
         self.classes = classes
-        self.states_to_classes = {i: c
-                                  for i, c
-                                  in enumerate(classes)}
+        self.states_to_classes = {i: c for i, c in enumerate(classes)}
         self.n_transitions = 3 * len(classes)
-        

@@ -8,8 +8,8 @@ from pyhacrf.pyhacrf import _Model
 
 
 def test_derivate_large():
-    classes = ['a', 'b', 'c']
-    y = 'b'
+    classes = ["a", "b", "c"]
+    y = "b"
     x = random.randn(20, 3, 10) * 5 + 3
     state_machine, states_to_classes = Hacrf._default_state_machine(classes)
     parameters = Hacrf._initialize_parameters(state_machine, x.shape[2])
@@ -31,8 +31,9 @@ def test_derivate_large():
 
     actual_ll, actual_dll = test_model.forward_backward(parameters)
 
-    print (abs(actual_dll) - abs(expected_dll)).sum()
+    print(abs(actual_dll) - abs(expected_dll)).sum()
     assert_array_almost_equal(actual_dll, expected_dll, decimal=4)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     test_derivate_large()

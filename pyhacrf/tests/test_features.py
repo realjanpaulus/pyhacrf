@@ -24,7 +24,9 @@ class TestStringPairFeatureExtractor(unittest.TestCase):
         expected_x[2, 2, 2] = 1.0
         expected_x[3, 3, 3] = 1.0
 
-        test_extractor = StringPairFeatureExtractor(bias=2.0, start=True, match=True, numeric=True)
+        test_extractor = StringPairFeatureExtractor(
+            bias=2.0, start=True, match=True, numeric=True
+        )
         actual_X = test_extractor.fit_transform([(s1, s2)])
 
         assert_array_almost_equal(expected_x, actual_X[0])
@@ -38,7 +40,7 @@ class TestStringPairFeatureExtractor(unittest.TestCase):
         chars = StringPairFeatureExtractor.CHARACTERS
         nchars = len(chars)
         print(nchars)
-        expected_x = np.zeros((2, 2, len(chars)**2 + 1))
+        expected_x = np.zeros((2, 2, len(chars) ** 2 + 1))
         expected_x[:, :, 0] = 1.0
         expected_x[0, 0, 2 + nchars * 1 + 1] = 1.0  # b->c
         expected_x[0, 1, 0 + nchars * 1 + 1] = 1.0  # b->a
@@ -50,5 +52,6 @@ class TestStringPairFeatureExtractor(unittest.TestCase):
 
         assert_array_almost_equal(expected_x, actual_X[0])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
