@@ -2,7 +2,7 @@ pyhacrf
 =======
 .. image:: https://travis-ci.org/dedupeio/pyhacrf.svg?branch=master
     :target: https://travis-ci.org/dedupeio/pyhacrf
-    
+
 .. image:: https://ci.appveyor.com/api/projects/status/kibqrd7wnsk2ilpf/branch/master?svg=true
     :target: https://ci.appveyor.com/project/fgregg/pyhacrf
 
@@ -101,3 +101,8 @@ Clone from repository, then
     python setup.py install
 
 To deploy to pypi, make sure you have compiled the \*.pyx files to \*.c
+
+Alternatively use the ``Makefile``
+
+::
+    make
